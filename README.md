@@ -1,78 +1,129 @@
-![logo_ironhack_blue 7](https://user-images.githubusercontent.com/23629340/40541063-a07a0a8a-601a-11e8-91b5-2f13e4e6b441.png)
+# Spring Boot REST API Lab 05 Final
 
-# LAB | SpringBoot REST API
+Aplicacion REST desarrollada con Spring Boot para gestionar productos y clientes en memoria.
 
-### Instructions
+## Tecnologias
 
-1. Fork this repo.
-2. Clone your fork to your local machine.
-3. Solve the challenges.
+- Java 17
+- Spring Boot 3.3.5
+- Spring Web
+- Spring Boot DevTools
+- Spring Boot Starter Validation
+- Maven
 
-  
-## Deliverables
+## Requisitos
 
-- Upon completion, add your solution to git.
-- Then commit to git and push to your repo on GitHub.
-- Make a pull request and paste the pull request link in the submission field in the Student Portal.
+- API-Key obligatoria en todas las peticiones: `123456`
+- Datos validados en productos y clientes
+- Manejo global de errores con respuestas JSON
 
-## Tasks
+## Estructura
 
-1. Create a Spring Boot application using Spring Initializr with the following dependencies:
-   - Spring Web
-   - Spring Boot DevTools
-   - Spring Boot Starter Validation
+- `model`: clases `Product` y `Customer`
+- `service`: logica de negocio en memoria
+- `controller`: endpoints REST
+- `config`: interceptor de API key
+- `exception`: excepciones personalizadas y handler global
 
-2. Create a `Product` class with the following validated properties:
-   - name (not blank, min length 3)
-   - price (positive number)
-   - category (not blank)
-   - quantity (positive number)
+## Endpoints
 
-3. Create a `ProductService` class that manages a List of Products and has methods to:
-   - Add a new product
-   - Get all products
-   - Get product by name
-   - Update product
-   - Delete product
-   - Get products by category
-   - Get products by price range
+### Products
 
-4. Create a `ProductController` class that:
-   - Uses constructor injection for the ProductService
-   - Requires an "API-Key" header for all requests (value: "123456")
-   - Has the following endpoints:
-     * POST `/products` - Create new product
-     * GET `/products` - Get all products
-     * GET `/products/{name}` - Get product by name
-     * PUT `/products/{name}` - Update product
-     * DELETE `/products/{name}` - Delete product
-     * GET `/products/category/{category}` - Get products by category
-     * GET `/products/price?min={min}&max={max}` - Get products by price range
+- `POST /products`
+- `GET /products`
+- `GET /products/{name}`
+- `PUT /products/{name}`
+- `DELETE /products/{name}`
+- `GET /products/category/{category}`
+- `GET /products/price?min={min}&max={max}`
 
-5. Create a global exception handler that handles:
-   - Validation errors (return proper error messages)
-   - Missing API-Key header
-   - Product not found
-   - Invalid price range
+### Customers
 
-6. Create a `Customer` class with the following validated properties:
-   - name (not blank)
-   - email (valid email format)
-   - age (minimum 18)
-   - address (not blank)
+- `POST /customers`
+- `GET /customers`
+- `GET /customers/{email}`
+- `PUT /customers/{email}`
+- `DELETE /customers/{email}`
 
-7. Create a `CustomerController` with endpoints to:
-   - Create new customer (with validation)
-   - Get all customers
-   - Get customer by email
-   - Update customer
-   - Delete customer
+## Ejemplo de headers
 
-**Remember**:
-- Use proper package structure
-- Use constructor injection instead of @Autowired
-- Test all endpoints using Postman
-- Include appropriate error handling
-- Use meaningful variable and method names
-- Return appropriate HTTP status codes
-- Include validation messages in responses
+```http
+API-Key: 123456
+Content-Type: application/json
+```
+
+## Ejemplo de payloads
+
+### Product
+
+```json
+{
+  "name": "Laptop",
+  "price": 1200,
+  "category": "Tech",
+  "quantity": 5
+}
+```
+
+### Customer
+
+```json
+{
+  "name": "Ana",
+  "email": "ana@example.com",
+  "age": 30,
+  "address": "Madrid"
+}
+```
+
+## Ejecutar el proyecto
+
+```bash
+mvn spring-boot:run
+```
+
+La API queda disponible en:
+
+```text
+http://localhost:8080
+```
+
+## Ejecutar tests
+
+```bash
+mvn test
+```
+
+## Validaciones implementadas
+
+### Product
+
+- `name`: obligatorio, minimo 3 caracteres
+- `price`: numero positivo
+- `category`: obligatoria
+- `quantity`: numero positivo
+
+### Customer
+
+- `name`: obligatorio
+- `email`: formato valido
+- `age`: minimo 18
+- `address`: obligatoria
+
+## Manejo de errores
+
+La API devuelve respuestas con codigo HTTP adecuado para:
+
+- errores de validacion
+- API-Key ausente
+- API-Key invalida
+- producto no encontrado
+- cliente no encontrado
+- rango de precios invalido
+- parametros faltantes o con tipo invalido
+
+## Verificacion realizada
+
+- La aplicacion compila correctamente
+- Los tests pasan correctamente
+- Se verificaron endpoints clave en `localhost:8080`
